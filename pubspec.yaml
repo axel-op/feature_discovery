@@ -26,3 +26,7 @@ dev_dependencies:
     sdk: flutter
 
   pedantic: 1.9.0
+
+dependency_overrides:
+  # TODO(creativecreatorormaybenot): Remove when Pedantic is updated in flutter_test.
+  pedantic: 1.9.0

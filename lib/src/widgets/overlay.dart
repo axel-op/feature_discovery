@@ -39,7 +39,7 @@ class DescribedFeatureOverlay extends StatefulWidget {
   /// It is intended for this to contain a [Text] widget, however, you can pass
   /// any [Widget].
   /// The overlay uses a [DefaultTextStyle] for the title, which is a combination
-  /// of [TextTheme.title] from [Theme] and the [textColor].
+  /// of [TextTheme.headline6] from [Theme] and the [textColor].
   final Widget title;
 
   /// This is the second content widget, i.e. it is displayed below [description].
@@ -48,6 +48,7 @@ class DescribedFeatureOverlay extends StatefulWidget {
   /// any [Widget].
   /// The overlay uses a [DefaultTextStyle] for the description, which is a combination
   /// of [TextTheme.body1] from [Theme] and the [textColor].
+  // TODO(creativecreatorormaybenot): Update TextTheme.body1 link to bodyText2 when Flutter stable deprecates body1.
   final Widget description;
 
   /// This is usually an [Icon].
@@ -194,7 +195,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
     try {
       _bloc = Bloc.of(context);
 
-      final Stream<EventType> newEventsStream = _bloc.eventsOut;
+      final newEventsStream = _bloc.eventsOut;
       if (_eventsStream != newEventsStream) _setStream(newEventsStream);
 
       // If this widget was not in the tree when the feature discovery was started,
@@ -305,7 +306,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
     _bloc.activeOverlays++;
 
     if (widget.onOpen != null) {
-      final bool shouldOpen = await widget.onOpen();
+      final shouldOpen = await widget.onOpen();
       assert(shouldOpen != null,
           'You need to return a [Future] that completes with true or false in [onOpen].');
       if (!shouldOpen) {
@@ -428,15 +429,15 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
   /// The value returned from here will be adjusted in [BackgroundContentLayoutDelegate]
   /// in order to match the transition progress and overlay state.
   double _backgroundRadius(Offset anchor) {
-    final bool isBackgroundCentered = _isCloseToTopOrBottom(anchor);
-    final double backgroundRadius = min(_screenSize.width, _screenSize.height) *
+    final isBackgroundCentered = _isCloseToTopOrBottom(anchor);
+    final backgroundRadius = min(_screenSize.width, _screenSize.height) *
         (isBackgroundCentered ? 1.0 : 0.7);
     return backgroundRadius;
   }
 
   Offset _backgroundPosition(Offset anchor, ContentLocation contentLocation) {
-    final double width = min(_screenSize.width, _screenSize.height);
-    final bool isBackgroundCentered = _isCloseToTopOrBottom(anchor);
+    final width = min(_screenSize.width, _screenSize.height);
+    final isBackgroundCentered = _isCloseToTopOrBottom(anchor);
 
     if (isBackgroundCentered) {
       return anchor;
@@ -461,7 +462,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
 
       switch (_state) {
         case FeatureOverlayState.opening:
-          final double adjustedPercent =
+          final adjustedPercent =
               const Interval(0.0, 0.8, curve: Curves.easeOut)
                   .transform(_transitionProgress);
           return Offset.lerp(startingBackgroundPosition,
@@ -498,14 +499,14 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
   }
 
   Offset _contentCenterPosition(Offset anchor) {
-    final double width = min(_screenSize.width, _screenSize.height);
-    final bool isBackgroundCentered = _isCloseToTopOrBottom(anchor);
+    final width = min(_screenSize.width, _screenSize.height);
+    final isBackgroundCentered = _isCloseToTopOrBottom(anchor);
 
     if (isBackgroundCentered) {
       return anchor;
     } else {
-      final Offset startingBackgroundPosition = anchor;
-      final Offset endingBackgroundPosition = Offset(
+      final startingBackgroundPosition = anchor;
+      final endingBackgroundPosition = Offset(
           width / 2.0 + (_isOnLeftHalfOfScreen(anchor) ? -20.0 : 20.0),
           anchor.dy +
               (_isOnTopHalfOfScreen(anchor)
@@ -514,7 +515,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
 
       switch (_state) {
         case FeatureOverlayState.opening:
-          final double adjustedPercent =
+          final adjustedPercent =
               const Interval(0.0, 0.8, curve: Curves.easeOut)
                   .transform(_transitionProgress);
           return Offset.lerp(startingBackgroundPosition,
@@ -544,22 +545,19 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
   Widget _buildOverlay(Offset anchor) {
     // This will be assigned either above or below, i.e. trivial from
     // widget.contentLocation will be converted to above or below.
-    final ContentLocation contentLocation =
-        _nonTrivialContentOrientation(anchor);
+    final contentLocation = _nonTrivialContentOrientation(anchor);
     assert(contentLocation != ContentLocation.trivial);
 
-    final Offset backgroundCenter =
-        _backgroundPosition(anchor, contentLocation);
-    final double backgroundRadius = _backgroundRadius(anchor);
+    final backgroundCenter = _backgroundPosition(anchor, contentLocation);
+    final backgroundRadius = _backgroundRadius(anchor);
 
-    final double contentOffsetMultiplier =
-        _contentOffsetMultiplier(contentLocation);
-    final Offset contentCenterPosition = _contentCenterPosition(anchor);
+    final contentOffsetMultiplier = _contentOffsetMultiplier(contentLocation);
+    final contentCenterPosition = _contentCenterPosition(anchor);
 
-    final double contentWidth = min(_screenSize.width, _screenSize.height);
+    final contentWidth = min(_screenSize.width, _screenSize.height);
 
-    final double dx = contentCenterPosition.dx - contentWidth;
-    final Offset contentPosition = Offset(
+    final dx = contentCenterPosition.dx - contentWidth;
+    final contentPosition = Offset(
       (dx.isNegative) ? 0.0 : dx,
       anchor.dy +
           contentOffsetMultiplier * (44 + 20), // 44 is the tap target's radius.
@@ -671,21 +669,18 @@ class _Background extends StatelessWidget {
   double get opacity {
     switch (state) {
       case FeatureOverlayState.opening:
-        final double adjustedPercent =
-            const Interval(0.0, 0.3, curve: Curves.easeOut)
-                .transform(transitionProgress);
+        final adjustedPercent = const Interval(0.0, 0.3, curve: Curves.easeOut)
+            .transform(transitionProgress);
         return 0.96 * adjustedPercent;
 
       case FeatureOverlayState.completing:
-        final double adjustedPercent =
-            const Interval(0.1, 0.6, curve: Curves.easeOut)
-                .transform(transitionProgress);
+        final adjustedPercent = const Interval(0.1, 0.6, curve: Curves.easeOut)
+            .transform(transitionProgress);
 
         return 0.96 * (1 - adjustedPercent);
       case FeatureOverlayState.dismissing:
-        final double adjustedPercent =
-            const Interval(0.2, 1.0, curve: Curves.easeOut)
-                .transform(transitionProgress);
+        final adjustedPercent = const Interval(0.2, 1.0, curve: Curves.easeOut)
+            .transform(transitionProgress);
         return 0.96 * (1 - adjustedPercent);
       case FeatureOverlayState.opened:
         return 0.96;
@@ -753,7 +748,7 @@ class _Pulse extends StatelessWidget {
   double get opacity {
     switch (state) {
       case FeatureOverlayState.opened:
-        final double percentOpaque =
+        final percentOpaque =
             1 - ((transitionProgress.clamp(0.3, 0.8) - 0.3) / 0.5);
         return (percentOpaque * 0.75).clamp(0, 1);
       case FeatureOverlayState.completing:

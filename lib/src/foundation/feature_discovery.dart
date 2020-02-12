@@ -42,7 +42,7 @@ class FeatureDiscovery extends StatelessWidget {
   /// call [completeCurrentStep] instead.
   static void dismissAll(BuildContext context) => _blocOf(context).dismiss();
 
-  @Deprecated("Use [dismissAll] instead.")
+  @Deprecated('Use [dismissAll] instead.')
   static void dismiss(BuildContext context) => dismissAll(context);
 
   /// This returns the feature id of the current feature discovery step, i.e.
@@ -55,7 +55,7 @@ class FeatureDiscovery extends StatelessWidget {
   static String currentFeatureIdOf(BuildContext context) =>
       _blocOf(context).activeFeatureId;
 
-  @Deprecated("Use [currentFeatureIdOf] instead.")
+  @Deprecated('Use [currentFeatureIdOf] instead.')
   static String activeFeatureId(BuildContext context) =>
       currentFeatureIdOf(context);
 

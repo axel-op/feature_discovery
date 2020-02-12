@@ -82,7 +82,8 @@ class Bloc {
   }
 
   void discoverFeatures(Iterable<String> steps) {
-    assert(steps != null && steps.isNotEmpty, 'You need to pass at least one step to [FeatureDiscovery.discoverFeatures].');
+    assert(steps != null && steps.isNotEmpty,
+        'You need to pass at least one step to [FeatureDiscovery.discoverFeatures].');
     _steps = steps;
     _activeStepIndex = 0;
     _activeOverlays = 0;
