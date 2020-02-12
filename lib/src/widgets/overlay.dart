@@ -251,7 +251,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
           // Only try opening when the active feature id matches the id of this widget.
           if (_bloc.activeFeatureId != widget.featureId) return;
           await _open();
-          return;
+          break;
         case EventType.complete:
         case EventType.dismiss:
           // This overlay was the active feature before this event if it is either opening or already opened.
@@ -261,11 +261,12 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
           if (event == EventType.complete) {
             await _complete();
           } else {
-            await _dismiss();
+            await _dismiss(force: true);
           }
-          return;
+          break;
+        default:
+          throw ArgumentError.value(event);
       }
-      throw ArgumentError.value(event);
     });
   }
 
@@ -358,7 +359,9 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
     _close();
   }
 
-  Future<void> _dismiss() async {
+  /// If [force] is true, the [onDismiss] function will be awaited
+  /// but its returned value will be ignored.
+  Future<void> _dismiss({bool force = false}) async {
     // The method might be triggered multiple times, especially when swiping.
     if (_awaitingClosure) return;
 
@@ -374,7 +377,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
 
       assert(shouldDismiss != null,
           'You need to return a [Future] that completes with true or false in [onDismiss].');
-      if (!shouldDismiss) return;
+      if (!shouldDismiss && !force) return;
     }
     _openController.stop();
     _pulseController.stop();

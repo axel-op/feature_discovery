@@ -81,7 +81,7 @@ class Bloc {
     _eventsController.close();
   }
 
-  void discoverFeatures({Iterable<String> steps}) {
+  void discoverFeatures({@required Iterable<String> steps}) {
     assert(steps != null);
     _steps = steps;
     _activeStepIndex = 0;
