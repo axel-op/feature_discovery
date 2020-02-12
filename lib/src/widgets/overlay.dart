@@ -567,12 +567,22 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
           contentOffsetMultiplier * (44 + 20), // 44 is the tap target's radius.
     );
 
+    // Will try to dismiss this overlay,
+    // then will call the bloc's dismiss function
+    // only if this overlay has been successfully dismissed.
+    void tryDismissThisThenAll() async {
+      await _dismiss();
+      if (_state == FeatureOverlayState.closed) {
+        _bloc.dismiss();
+      }
+    }
+
     return Stack(
       children: <Widget>[
         GestureDetector(
-          onTap: _bloc.dismiss,
+          onTap: tryDismissThisThenAll,
           // According to the spec, the user should be able to dismiss by swiping.
-          onPanUpdate: (DragUpdateDetails _) => _bloc.dismiss(),
+          onPanUpdate: (DragUpdateDetails _) => tryDismissThisThenAll(),
           child: Container(
             width: double.infinity,
             height: double.infinity,

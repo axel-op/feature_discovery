@@ -11,6 +11,9 @@
 * Non breaking:
   * Incorrect documentation of some static methods in `FeatureDiscovery` has been edited.
   * Error messages have been improved : the error thrown when the widget tree isn't wrapped in a `FeatureDiscovery` widget is clearer.
+  * Incorrect behavior when `onDismiss` returned `Future<false>` has been fixed:
+    * overlays will always be dismissed when calling `FeatureDiscovery.dismissAll`;
+    * a step can be completed after the user tries to dismiss it.
 
 ## 0.6.1
 
