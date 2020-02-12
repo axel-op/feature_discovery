@@ -359,15 +359,13 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
     _close();
   }
 
-  /// If [force] is true, the [onDismiss] function will be awaited
-  /// but its returned value will be ignored.
   Future<void> _dismiss({bool force = false}) async {
     // The method might be triggered multiple times, especially when swiping.
     if (_awaitingClosure) return;
 
     _awaitingClosure = true;
 
-    if (widget.onDismiss != null) {
+    if (!force && widget.onDismiss != null) {
       bool shouldDismiss;
       try {
         shouldDismiss = await widget.onDismiss();
@@ -377,7 +375,7 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
 
       assert(shouldDismiss != null,
           'You need to return a [Future] that completes with true or false in [onDismiss].');
-      if (!shouldDismiss && !force) return;
+      if (!shouldDismiss) return;
     }
     _openController.stop();
     _pulseController.stop();

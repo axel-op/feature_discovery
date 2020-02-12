@@ -29,7 +29,7 @@ class FeatureDiscovery extends StatelessWidget {
   /// Though they can be placed in any [Iterable], it is recommended to pass them as a [Set]
   /// because this ensures that every step is only shown once.
   static void discoverFeatures(BuildContext context, Iterable<String> steps) =>
-      _blocOf(context).discoverFeatures(steps: steps.toList());
+      _blocOf(context).discoverFeatures(steps.toList());
 
   /// This will schedule completion of the current discovery step and continue
   /// onto the step after the completion animation of the current overlay if successful.
