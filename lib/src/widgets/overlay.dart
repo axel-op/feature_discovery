@@ -39,7 +39,8 @@ class DescribedFeatureOverlay extends StatefulWidget {
   /// It is intended for this to contain a [Text] widget, however, you can pass
   /// any [Widget].
   /// The overlay uses a [DefaultTextStyle] for the title, which is a combination
-  /// of [TextTheme.headline6] from [Theme] and the [textColor].
+  /// of [TextTheme.title] from [Theme] and the [textColor].
+  // TODO(creativecreatorormaybenot): Update TextTheme.title link to headline6 when Flutter stable deprecates body1.
   final Widget title;
 
   /// This is the second content widget, i.e. it is displayed below [description].

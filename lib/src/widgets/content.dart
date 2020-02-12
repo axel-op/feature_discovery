@@ -77,7 +77,7 @@ class Content extends StatelessWidget {
                   DefaultTextStyle(
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .title // TODO(creativecreatorormaybenot): Update to headline6 when Flutter stable deprecates title.
                         .copyWith(color: textColor),
                     child: title,
                   ),
