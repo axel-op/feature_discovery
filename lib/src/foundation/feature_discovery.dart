@@ -36,9 +36,10 @@ class FeatureDiscovery extends StatelessWidget {
   static void completeCurrentStep(BuildContext context) =>
       _blocOf(context).completeStep();
 
-  /// This will schedule dismissal of the current discovery step and with that
-  /// of the current feature discovery. The dismissal animation will play if successful.
-  /// If you want to complete the step and continue the feature discovery,
+  /// A method to dismiss all steps.
+  ///
+  /// The `onDimiss` parameter will be ignored for every active overlay.
+  /// If you want to complete the current step and continue the feature discovery,
   /// call [completeCurrentStep] instead.
   static void dismissAll(BuildContext context) => _blocOf(context).dismiss();
 
